@@ -1,6 +1,7 @@
 <template>
   <section>
     <section>
+      <TimetableNav />
       <div class="columns-2">
         <h1 class="text-3xl text-center defqon">Personal Timetable </h1>
         <div class="float-right"><small class="text-info" @click="shareTimetable"><i class="far fa-share"></i> Share with others</small></div>

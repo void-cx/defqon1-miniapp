@@ -1,8 +1,11 @@
 <template>
   <section>
     <section>
-      <h1 class="text-3xl text-center defqon">Timetable</h1>
-
+      <TimetableNav />
+      <div class="columns-2">
+        <h1 class="text-3xl text-center defqon">Official Timetable </h1>
+        <div class="float-right"></div>
+      </div>
       <div class="columns-1 sm:columns-2">
         <label class="form-control w-full">
           <div class="label">

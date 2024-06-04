@@ -1,13 +1,13 @@
 <template>
   <section>
-    <section>
-      <div class="columns-2">
-        <h1 class="text-3xl text-center defqon">Shared Timetable </h1>
-        <div class="float-right"><small class="text-info" @click="runTimetableImport"><i class="far fa-download"></i> Import & Replace Local</small></div>
-      </div>
+    <TimetableNav />
+    <div class="columns-2">
+      <h1 class="text-3xl text-center defqon">Shared Timetable </h1>
+      <div v-if="shareId && sharedTimetable" class="float-right"><small class="text-info" @click="runTimetableImport"><i class="far fa-download"></i> Import & Replace Local</small></div>
+    </div>
 
-
-      <div class="columns-1 sm:columns-2">
+    <template v-if="shareId">
+      <div v-if="shareId" class="columns-1 sm:columns-2">
         <label class="form-control w-full">
           <div class="label">
             <span class="label-text">Select timetable day</span>
@@ -26,23 +26,35 @@
           </select>
         </label>
       </div>
-    </section>
-    
-    <div v-if="isLoading" class="text-2xl mt-2 text-center text-secondary defqon">
-      <span class="loading loading-infinity loading-lg text-primary"></span>
-    </div>
-    <section v-else>
-      <PersonalTimetable
-        v-if="selectedTimetable.length > 0"
-        :date="selectedDay"
-        :stage="null"
-        :timetable="selectedTimetable"
-        :buttons="false"
-      />
-      <div v-else class="text-2xl mt-2 text-center text-secondary defqon">
-        <p>No performances saved for this day.</p>
+      
+      <div v-if="isLoading" class="text-2xl mt-2 text-center text-secondary defqon">
+        <span class="loading loading-infinity loading-lg text-primary"></span>
       </div>
-    </section>
+      <section v-else>
+        <PersonalTimetable
+          v-if="selectedTimetable.length > 0"
+          :date="selectedDay"
+          :stage="null"
+          :timetable="selectedTimetable"
+          :buttons="false"
+        />
+        <div v-else class="text-2xl mt-2 text-center text-secondary defqon">
+          <p>No performances saved for this day.</p>
+        </div>
+      </section>
+    </template>
+
+    <template v-else>
+      <div role="alert" class="alert shadow-lg">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-info shrink-0 w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+        <div>
+          <h3 class="font-bold">Shared Timetable</h3>
+          <div class="text-xs">You have not provided a shared timetable id. When someone shares their timetable with you, this page will be used to display it.</div>
+        </div>
+        <a role="button" href="/timetable" class="btn btn-sm">Create own timetable</a>
+      </div>
+    </template>
+    
   </section>
 
   <dialog id="import_ok" ref="importOkModal" class="modal">
@@ -68,15 +80,16 @@ const days = ref([]);
 const sharedTimetable = ref([]);
 const selectedTimetable = ref([]);
 const isLoading = ref(true);
+const shareId = ref('')
 
 const importOkModal = ref(null)
 
 const fetchTimetableData = async () => {
   try {
     const route = useRoute()
-    const shareId = route.hash.substring(1)
-
-    const getShareData = await $fetch(`/api/share/${shareId}`)
+    shareId.value = route.hash.substring(1)
+    if (shareId.value === '') return
+    const getShareData = await $fetch(`/api/share/${shareId.value}`)
     if (!getShareData.timetable) return
 
     sharedTimetable.value = JSON.parse(getShareData.timetable)
