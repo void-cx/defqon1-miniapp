@@ -5,7 +5,7 @@
     <div class="mt-4 flex flex-col text-center">
       <h1 class="text-2xl text-center">Important Contacts</h1>
       <div class="basis-1/3 mt-1"><a role="button" href="tel:+112" class="btn btn-secondary">Medical Emergency (112)</a></div>
-      <div class="basis-1/3 mt-1"><a role="button" href="tel:+31627851316" class="btn btn-accent">Campsite / Q-Travel Emergency (+31 6278 51316)</a></div>
+      <div class="basis-1/3 mt-1"><a role="button" href="tel:+31627851316" class="btn btn-accent">Q-Travel (Camping) Hotline (+31 6278 51316)</a></div>
     </div>
 
     <div class="mt-4 flex flex-col text-center">

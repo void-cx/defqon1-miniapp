@@ -5,6 +5,7 @@ export default defineNuxtConfig({
   modules: ['@pinia/nuxt', '@pinia-plugin-persistedstate/nuxt', "nuxt-mongoose"],
   app: {
     head: {
+      title: 'VOID @ DEFQON.1 Mini App',
       link: [
         { rel: 'stylesheet', href:'https://cdn.msit.systems/font-awesome/web/css/all.min.css', crossorigin: 'anonymous', referrerpolicy: 'no-referrer' },
       ],
