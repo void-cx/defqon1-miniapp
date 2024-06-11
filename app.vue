@@ -6,5 +6,4 @@
       <NuxtPage />
     </div>
   </NuxtLayout>
-  <NavBar />
 </template>

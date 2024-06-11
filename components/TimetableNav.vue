@@ -1,14 +1,22 @@
 <template>
-  <section class="w-full text-center mb-3">
-    <ul class="menu bg-base-200 menu-horizontal rounded-box w-full ">
-      <li v-for="link in navigationLinks" :key="link.url">
-        <a :href="link.url" :class="route.path == link.url ? 'active' : ''">
-          <i class="far" :class="link.icon"></i>
-          {{ link.name }}
-        </a>
-      </li>
-    </ul>
-  </section>
+  <div class="btm-nav bg-base-200" style="z-index:9999">
+    <template
+      v-for="link in navigationLinks"
+      :key="link.name"
+    >
+      <a
+        :href="link.url"
+        role="button"
+        :class="route.path == link.url ? 'active' : ''"
+      >
+        <i
+          class="far"
+          :class="link.icon"
+        ></i>
+        <span class="btm-nav-label">{{ link.name }}</span>
+      </a>
+    </template>
+  </div>
 </template>
 
 <script setup>

@@ -2,7 +2,12 @@
 export default defineNuxtConfig({
   devtools: { enabled: true },
   css: ['~/assets/css/main.css'],
-  modules: ['@pinia/nuxt', '@pinia-plugin-persistedstate/nuxt', "nuxt-mongoose"],
+  modules: [
+    '@pinia/nuxt',
+    '@pinia-plugin-persistedstate/nuxt',
+    "nuxt-mongoose",
+    "nuxt3-leaflet"
+  ],
   app: {
     head: {
       title: 'VOID @ DEFQON.1 Mini App',
@@ -11,6 +16,13 @@ export default defineNuxtConfig({
       ],
       meta: [
         { name: 'viewport', content: 'width=device-width, height=device-height, initial-scale=1.0, viewport-fit=cover' }
+      ],
+      script: [
+        {
+          defer: true,
+          src: 'https://click.msit.systems/js/script.js',
+          'data-domain': 'defqon1.void.cx',
+        }
       ]
     },
   },
