@@ -97,7 +97,7 @@ const navigation = [
     icon: 'fa-backpack',
     url: '/packinglist'
   },
-  { name: 'Festival Map', icon: 'fa-map', url: '/map' },
+  // { name: 'Festival Map', icon: 'fa-map', url: '/map' },
   { name: 'Questions & Answers', icon: 'fa-block-question', url: '/faq' },
   { name: 'Help', icon: 'fa-life-ring', url: '/help' },
 ]
