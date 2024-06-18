@@ -2,10 +2,15 @@
   <section>
     <section>
       <TimetableNav />
-      <div class="columns-2">
+      <div class="">
         <h1 class="text-3xl text-center defqon">Personal Timetable </h1>
-        <div class="float-right"><small class="text-info" @click="shareTimetable"><i class="far fa-share"></i> Share with others</small></div>
+        <div class="columns-2 text-center">
+          <div><a role="button" nohref class="btn btn-sm text-sm text-info" @click="shareTimetable"><i class="far fa-share"></i> Share with others</a></div>
+          <div><a role="button" nohref class="btn btn-sm text-sm text-info" @click="downloadTimetable"><i class="far fa-download"></i> Calendar (*.ics)</a></div>
+        </div>
       </div>
+
+      {{ error }}
 
       <div class="columns-1 sm:columns-2">
         <label class="form-control w-full">
@@ -61,13 +66,15 @@
 <script setup>
 import { ref, onMounted, watch } from 'vue';
 import { useTimetableStore } from '~/store/timetable';
+import { DateTime } from 'luxon';
 import official from '@/store/timetable.json';
+import { ICalCalendar, ICalAlarmType } from 'ical-generator';
 
 const selectedDay = ref(null);
 const days = ref([]);
 const selectedTimetable = ref([]);
 const isLoading = ref(true);
-
+const error = ref('');
 const shareOkModal = ref(null);
 const timetableShareUrl = ref(null);
 
@@ -159,6 +166,55 @@ const shareTimetable = async () => {
     })
   } catch (error) {
     console.error(error)
+  }
+}
+
+const downloadTimetable = async () => {
+  try {
+    const personalTimetable = useTimetableStore();
+    const calendar = new ICalCalendar();
+    calendar.timezone('Europe/Amsterdam');
+
+    for(const day of personalTimetable.timetable) {
+      let prevStage = null;
+      for(const entry of day.entries.sort((a, b) => a.start - b.start)) {
+        const event = calendar.createEvent({
+          start: DateTime.fromISO(entry.performance.start),
+          end: DateTime.fromISO(entry.performance.end),
+          summary: `${entry.performance.title} @ ${entry.stage.title}`,
+          organizer: 'Powered by VOID @ DEFQON.1 (https://defqon1.void.cx) <defqon1@void.cx>',
+          url: 'https://defqon1.void.cx',
+          timezone: 'Europe/Amsterdam',
+          location: {
+            title: entry.stage.title
+          }
+        });
+
+        if (entry.stage.id !== prevStage) {
+          event.createAlarm({
+            type: ICalAlarmType.display,
+            trigger: 10 * 60
+          });
+          event.createAlarm({
+            type: ICalAlarmType.audio,
+            trigger: 5 * 60
+          });
+        }
+        prevStage = entry.stage.id;
+      }
+    }
+
+    const href = URL.createObjectURL(new Blob([calendar.toString()], { type: 'text/calendar' }));
+    const link = document.createElement('a');
+    link.href = href;
+    link.setAttribute('download', `my-defqon1-timetable-${(+new Date())}.ics`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(href);
+
+  } catch (err) {
+    alert(err)
   }
 }
 

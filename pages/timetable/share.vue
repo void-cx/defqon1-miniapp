@@ -1,9 +1,13 @@
 <template>
   <section>
     <TimetableNav />
-    <div class="columns-2">
+    <div class="">
       <h1 class="text-3xl text-center defqon">Shared Timetable </h1>
-      <div v-if="shareId && sharedTimetable" class="float-right"><small class="text-info" @click="runTimetableImport"><i class="far fa-download"></i> Import & Replace Local</small></div>
+      <div class="columns-2 text-center">
+        <div v-if="shareId && sharedTimetable"><a role="button" href="#" class="btn btn-sm text-sm text-info" @click="runTimetableImport"><i class="far fa-download"></i> Import & Replace</a></div>
+        
+        <div v-if="shareId && sharedTimetable"><a role="button" nohref class="btn btn-sm text-sm text-info" @click="downloadTimetable"><i class="far fa-download"></i> Calendar (*.ics)</a></div>
+      </div>
     </div>
 
     <template v-if="shareId">
@@ -156,6 +160,10 @@ const runTimetableImport = async () => {
   tts.updateTimetable(sharedTimetable.value)
   importOkModal.value.showModal()
 };
+
+const downloadTimetable = async () => {
+  window.location.href = `/api/calendar/${shareId.value}`
+}
 
 watch(selectedDay, (date) => {
   loadPersonalTimetable(date);
